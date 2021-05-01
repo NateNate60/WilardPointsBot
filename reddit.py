@@ -102,12 +102,12 @@ def modcommand(message, accountsdb) :
         return False
     if "!delete" in body[0] or "!close" in body[0] :
         for i in range(1,len(body)) :
-            if balance(body[i], accountsdb) != None :
+            if database.balance(body[i], accountsdb) != None :
                 database.deleteaccount(body[i], accountsdb)
-                reply += "Successfully deleted " + body[i] +"'s account\n"
+                reply += "Successfully deleted " + body[i] +"'s account\n\n"
                 log(message.author.name + " deleted " + body[i] + "'s account")
             else :
-                reply += body[i] + " does not have an account\n"
+                reply += body[i] + " does not have an account\n\n"
         message.reply(reply + config.signature)
         return True
     if "!add" in body[0] or "!credit" in body[0] :
