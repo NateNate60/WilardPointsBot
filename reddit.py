@@ -81,11 +81,13 @@ def processinbox(r: praw.Reddit, accountsdb) :
             except ValueError :
                 message.reply("Error: amount must be an integer" + config.signature)
                 continue
-        if "!" in body[0] and not modcommand(message, accountsdb):
+        mc = modcommand(message, accountsdb)
+        if "!" in body[0] and not mc:
             message.reply("Command \"" + body[0] + "\" not found." + config.signature)
             if config.markread :
                 continue
-        r.inbox.mark_unread([message])
+        if not mc :
+            r.inbox.mark_unread([message])
     time.sleep(config.sleeptime)
 
 
@@ -119,6 +121,7 @@ def modcommand(message, accountsdb) :
             amt = int(body[2])
             database.change(body[1], amt, accountsdb)
             log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
+            return True
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
             return True
@@ -135,6 +138,7 @@ def modcommand(message, accountsdb) :
                 amt *= -1
             database.change(body[1], amt, accountsdb)
             log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
+            return True
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
             return True
