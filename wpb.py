@@ -23,7 +23,7 @@ def openqueue() :
 def deleteaccount(user: str, accountsdb) :
     user = user.lower()
     with accountsdb:
-        accountsdb.execute("DELETE FROM accounts WHERE username=" + user)
+        accountsdb.execute("DELETE FROM accounts WHERE username=\"" + user + '"')
 
 #Create a new account. Returns true if the user already has an account, otherwise, returns false
 def createaccount(user: str, accountsdb, startingbalance: int = 0) :

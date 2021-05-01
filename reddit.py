@@ -22,16 +22,10 @@ def login() :
     log('Authenticated')
     return r
 
-#Returns a list of PMs, in a list of PRAW message objects
-def checkinbox(r: praw.Reddit) :
-    pms = []
-    for message in r.inbox.unread() :
-        pms.append(message)
-    return pms
-
 #Process a list of PMs, looking for commands in them
-def processinbox(r: praw.Reddit, inbox: list, accountsdb) :
-    for message in inbox :
+def processinbox(r: praw.Reddit, accountsdb) :
+    for message in r.inbox.unread() :
+        r.inbox.mark_read([message])
         body = message.body.split()
         body[0] = body[0].lower()
         user = ''
@@ -47,12 +41,12 @@ def processinbox(r: praw.Reddit, inbox: list, accountsdb) :
         if "!newa" in body[0] or "!createa" in body[0]:
             if database.balance(message.author.name) == None :
                 database.createaccount(message.author.name, accountsdb, config.startingbalance)
-                message.reply("Account created. Your starting balance is " + config.startingbalance + " " + config.currencyname + config.signature)
+                message.reply("Account created. Your starting balance is " + str(config.startingbalance) + " " + config.currencyname + config.signature)
                 log(message.author.name + " created a new account")
             else :
-                message.reply("You already have an account. Your balance is " + database.balance(message.author.name) + " " + config.currencyname + config.signature)
+                message.reply("You already have an account. Your balance is " + str(database.balance(message.author.name)) + " " + config.currencyname + config.signature)
             continue
-        if ("!delete" in body[0] or "!close" in body[0]) and len(body == 1) :
+        if ("!delete" in body[0] or "!close" in body[0]) and len(body) == 1 :
             if database.balance(message.author.name) == None :
                 message.reply("You don't have an account." + config.signature)
             else :
@@ -80,17 +74,18 @@ def processinbox(r: praw.Reddit, inbox: list, accountsdb) :
                     continue
                 database.change(message.author.name, amt * -1, accountsdb)
                 database.change(body[1], amt, accountsdb)
-                message.reply("Transfer successful! Your available balance is now " + database.balance(message.author.name, accountsdb) + " " + config.currencyname + config.signature)
+                message.reply("Transfer successful! Your available balance is now " + str(database.balance(message.author.name, accountsdb)) + " " + config.currencyname + config.signature)
                 r.redditor(body[1]).message("You received a transfer", "You were sent " + amt + " " + config.currencyname + " from u/" + message.author.name + config.signature)
-                log(message.author.name + " transferred " + amt + " to " + body[1] + "; new balance = " + database.balance(message.author.name, accountsdb))
+                log(message.author.name + " transferred " + amt + " to " + body[1] + "; new balance = " + str(database.balance(message.author.name, accountsdb)))
             except ValueError :
                 message.reply("Error: amount must be an integer" + config.signature)
                 continue
         if "!" in body[0] and not modcommand(message, accountsdb):
             message.reply("Command " + body[1] + "not found." + config.signature)
-        if config.markread :
-            message.markread()
-        time.sleep(config.sleeptime)
+            if config.markread :
+                continue
+        r.inbox.mark_unread([message])
+    time.sleep(config.sleeptime)
 
 
 #Check a message for mod commands. Returns true if a command was
@@ -170,7 +165,7 @@ def awardposts(r, accountsdb) :
         if post.id not in alreadycommented :
             post.reply ("Hello! I am the bot (that you subscribed to) that awards " + config.currencyname + " to good posts. I am pleased"+
                         " to inform you that your post has reached the " + tier + " tier. As such, I am awarding you " + str(award) + " " + config.currencyname + " for this post. I will update" +
-                        " you if you earn more. I check the top 12 posts ever six hours. Pinned posts are unfortunately not eligible. You've got " + database.balance(post.author.name, accountsdb) + " "  + config.currencyname + " now.")
+                        " you if you earn more. I check the top 12 posts ever six hours. Pinned posts are unfortunately not eligible. You've got " + str(database.balance(post.author.name, accountsdb)) + " "  + config.currencyname + " now.")
             alreadycommented.append(post.id)
         else :
             post.author.message("Your account balance has increased","Your account balance has increased by " + str(award) + " " + config.currencyname + config.signature)
