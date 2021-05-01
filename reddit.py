@@ -82,7 +82,7 @@ def processinbox(r: praw.Reddit, accountsdb) :
                 message.reply("Error: amount must be an integer" + config.signature)
                 continue
         if "!" in body[0] and not modcommand(message, accountsdb):
-            message.reply("Command " + body[0] + " not found." + config.signature)
+            message.reply("Command \"" + body[0] + "\" not found." + config.signature)
             if config.markread :
                 continue
         r.inbox.mark_unread([message])
