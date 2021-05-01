@@ -75,13 +75,14 @@ def processinbox(r: praw.Reddit, accountsdb) :
                 database.change(message.author.name, amt * -1, accountsdb)
                 database.change(body[1], amt, accountsdb)
                 message.reply("Transfer successful! Your available balance is now " + str(database.balance(message.author.name, accountsdb)) + " " + config.currencyname + config.signature)
-                r.redditor(body[1]).message("You received a transfer", "You were sent " + amt + " " + config.currencyname + " from u/" + message.author.name + config.signature)
-                log(message.author.name + " transferred " + amt + " to " + body[1] + "; new balance = " + str(database.balance(message.author.name, accountsdb)))
+                r.redditor(body[1]).message("You received a transfer", "You were sent " + str(amt) + " " + config.currencyname + " from u/" + message.author.name + config.signature)
+                log(message.author.name + " transferred " + str(amt) + " to " + body[1] + "; new balance = " + str(database.balance(message.author.name, accountsdb)))
+                continue
             except ValueError :
                 message.reply("Error: amount must be an integer" + config.signature)
                 continue
         if "!" in body[0] and not modcommand(message, accountsdb):
-            message.reply("Command " + body[1] + "not found." + config.signature)
+            message.reply("Command " + body[0] + " not found." + config.signature)
             if config.markread :
                 continue
         r.inbox.mark_unread([message])
@@ -117,7 +118,7 @@ def modcommand(message, accountsdb) :
         try :
             amt = int(body[2])
             database.change(body[1], amt, accountsdb)
-            log(message.author.name + " changed " + body[1] + "'s balance by " + amt)
+            log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
             return True
@@ -133,7 +134,7 @@ def modcommand(message, accountsdb) :
             if amt > 0 :
                 amt *= -1
             database.change(body[1], amt, accountsdb)
-            log(message.author.name + " changed " + body[1] + "'s balance by " + amt)
+            log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
             return True
