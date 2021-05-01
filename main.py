@@ -10,3 +10,5 @@ def main() :
         inbox = reddit.checkinbox()
         reddit.processinbox(r, inbox, accountsdb)
         reddit.awardposts(r, alreadycommented, accountsdb)
+
+main()
