@@ -2,12 +2,15 @@
 #Working directory for all the databases
 #Must not end with '/'. So '/home/user/wpb' is OK,
 # '/home/user/wpb/' is not OK
-path = "~/wpb"
+path = "/home/nate/wpb"
 
 #If a PM contains no suitable commands, should it be marked as read?
 #Set to false if you have other scripts (or people) monitoring this
 # inbox as well
 markread = True
+
+#How much does each user start with when they open an account?
+startingbalance = 0
 
 #What do you want your currency's name to be?
 #Example: "Dopey Dingus Dollars", "USD", etc
