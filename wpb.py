@@ -8,22 +8,16 @@ def opendb() :
         accounts.execute("CREATE TABLE IF NOT EXISTS accounts "
                          "(username TEXT NOT NULL PRIMARY KEY, " +
                          " balance INTEGER NOT NULL)")
+        accounts.commit()
     return accounts
 
-#Opens the queue database, returning the SQLite object.
-def openqueue() :
-    queue = sqlite3.connect(config.path + '/accounts.sqlite3')
-    with queue:
-        queue.execute("CREATE TABLE IF NOT EXISTS queue"
-                      "(username TEXT NOT NULL PRIMARY KEY,"
-                      " action INTEGER NOT NULL)")
-    return queue
 
 #Delete the selected user account.
 def deleteaccount(user: str, accountsdb) :
     user = user.lower()
     with accountsdb:
         accountsdb.execute("DELETE FROM accounts WHERE username=\"" + user + '"')
+        accountsdb.commit()
 
 #Create a new account. Returns true if the user already has an account, otherwise, returns false
 def createaccount(user: str, accountsdb, startingbalance: int = 0) :
@@ -35,13 +29,15 @@ def createaccount(user: str, accountsdb, startingbalance: int = 0) :
                            (user,))
         if (startingbalance != 0) :
             change(user, startingbalance, accountsdb)
-            
+        accountsdb.commit()
 #Credit or debit an account with a certain number of points
 def change(user: str, amount: int, accountsdb) :
     user = user.lower()
-    accountsdb.execute("UPDATE accounts " +
-                       "SET balance = balance + " + str(amount) +
-                       " WHERE username =\"" + user + '"')
+    with accountsdb:
+        accountsdb.execute("UPDATE accounts " +
+                        "SET balance = balance + " + str(amount) +
+                        " WHERE username =\"" + user + '"')
+        accountsdb.commit
 
 #Queries a user's balance. Returns None if the user doesn't have an account
 def balance(user: str, accountsdb = None) :
