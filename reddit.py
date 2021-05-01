@@ -121,6 +121,7 @@ def modcommand(message, accountsdb) :
             amt = int(body[2])
             database.change(body[1], amt, accountsdb)
             log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
+            message.reply("The command executed successfully. " + body[1] + " now has " + str(database.balance(body[1], accountsdb)) + " " + config.currencyname)
             return True
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
@@ -138,6 +139,7 @@ def modcommand(message, accountsdb) :
                 amt *= -1
             database.change(body[1], amt, accountsdb)
             log(message.author.name + " changed " + body[1] + "'s balance by " + str(amt))
+            message.reply("The command executed successfully. " + body[1] + " now has " + str(database.balance(body[1], accountsdb)) + " " + config.currencyname)
             return True
         except ValueError :
             message.reply("Error: \"" + body[2] +"\" is not an integer" + config.signature)
