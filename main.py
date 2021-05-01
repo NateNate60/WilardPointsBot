@@ -7,8 +7,8 @@ def main() :
     accountsdb = database.opendb()
     r = reddit.login()
     while True :
-        inbox = reddit.checkinbox()
+        inbox = reddit.checkinbox(r)
         reddit.processinbox(r, inbox, accountsdb)
-        reddit.awardposts(r, alreadycommented, accountsdb)
+        reddit.awardposts(r, accountsdb)
 
 main()
