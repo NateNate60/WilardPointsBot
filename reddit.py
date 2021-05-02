@@ -98,7 +98,7 @@ def processinbox(r: praw.Reddit, accountsdb) :
 def modcommand(message, accountsdb) :
     body = message.body.split()
     reply = ""
-    if message.author not in config.mods :
+    if message.author.name not in config.mods :
         return False
     if "!delete" in body[0] or "!close" in body[0] :
         for i in range(1,len(body)) :
@@ -167,7 +167,7 @@ def awardposts(r, accountsdb) :
         elif post.score >= config.tierscore[4] :
             tier = config.tier[4]
         award = post.score // 10
-        database.change(post.author, award, accountsdb)
+        database.change(post.author.name, award, accountsdb)
         log(post.author.name + " gained " + str(award) + " for post " + post.id)
         if post.id not in alreadycommented :
             post.reply ("Hello! I am the bot (that you subscribed to) that awards " + config.currencyname + " to good posts. I am pleased"+
