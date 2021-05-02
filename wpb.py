@@ -19,7 +19,7 @@ def deleteaccount(user: str, accountsdb) :
         accountsdb.execute("DELETE FROM accounts WHERE username=\"" + user + '"')
         accountsdb.commit()
 
-#Create a new account. Returns true if the user already has an account, otherwise, returns false
+#Create a new account.
 def createaccount(user: str, accountsdb, startingbalance: int = 0) :
     user = user.lower()
     with accountsdb :
