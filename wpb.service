@@ -1,0 +1,12 @@
+[Unit]
+Description=Willard Points Bot
+After=syslog.target
+
+[Service]
+Type=simple
+User=nate
+WorkingDirectory=/home/nate/wpb
+ExecStart=python3 'main'
+
+[Install]
+WantedBy=multi-user.target
