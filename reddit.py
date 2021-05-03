@@ -153,7 +153,7 @@ def awardposts(r, accountsdb) :
         alreadycommented = json.load(f)
     if int(time.time())%21600 >= config.sleeptime :
         return alreadycommented
-    for post in r.subreddit('townofsalemgame').hot(limit = 12) :
+    for post in r.subreddit(config.subreddit).hot(limit = 12) :
         if post.stickied or database.balance(post.author.name, accountsdb) == None or post.score < 80 :
             continue
         elif post.score >= config.tierscore[0] and post.score < config.tierscore[1] :
