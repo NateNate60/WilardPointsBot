@@ -1,6 +1,6 @@
 authentication.py
 *.pyc
 accounts.sqlite3
-config.py
+config.*
 *.json
 log.txt
