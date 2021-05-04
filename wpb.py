@@ -20,7 +20,7 @@ def deleteaccount(user: str, accountsdb) :
         accountsdb.commit()
 
 #Create a new account.
-def createaccount(user: str, accountsdb, startingbalance: int = 0) :
+def createaccount(user: str, accountsdb, startingbalance: int = config.startingbalance) :
     user = user.lower()
     with accountsdb :
 
