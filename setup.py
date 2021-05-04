@@ -6,6 +6,7 @@ def main() :
         import subprocess
         import os
         import shutil
+        import sqlite3
     except ModuleNotFoundError:
         print ("You are missing required system packages. Setup cannot install WillardPointsBot automatically.")
         print ("This may be due to a corrupt or inadequate Python installation")
