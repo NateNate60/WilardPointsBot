@@ -52,6 +52,31 @@ def main() :
         f.write("{}")
     with open (path + "/log.txt", 'w') as f:
         f.write("This is the WPB debug logfile. If you enabled logging to file in the config (located at " + path + "), output will be logged here. Log to file is on by default")
+    with open (path + "/authentication.py", 'w') as f:
+        print("You'll now be asked for the credentials of the Reddit account that you want the bot to use.")
+        print("You must obtain Reddit API keys first. You can obtain API keys at https://www.reddit.com/prefs/apps/")
+        while True :
+            username = input("Enter your Reddit username: ")
+            password = input("Enter your Reddit password: ")
+            client_id = input("Enter your API client ID: ")
+            client_secret = input("Enter your API client secret: ")
+            print("Verifying credentials...")
+            f.write("username=" + username + '\npassword=' + password + '\nclient_id=' + client_id + '\nclient_secret=' + client_secret)
+            try :
+                r = praw.Reddit(username=username,
+                        password=password,
+                        client_id=client_id,
+                        client_secret=client_secret,
+                        user_agent="WPB4setup")
+                print ("Authentication successful")
+                break
+            except Exception :
+                print ("An error occured during login. Your credentials may be incorrect.")
+                if "y" in input("Would you like to try again? If no, then you will have to set this up manually later. (y/n) ") :
+                    continue
+                print ("You can input the authentication information in " + path + "/authentication.py")
+                break
+    print ("Copying files...")
     shutil.copyfile("./reddit.py", path + '/reddit.py')
     shutil.copyfile("./main.py", path + '/main.py')
     shutil.copyfile("./wpb.py", path + "/wpb.py")
