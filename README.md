@@ -1,7 +1,8 @@
 # WilardPointsBot
 A simple banking bot that can keep track of users' account balances and allows communities to create their own point/currency systems. Designed to work with Reddit via PRAW.
 
-**This was one of my first projects, made while I was in secondary school. Please excuse the spaghetti code.**
+## Personal note
+This is a project created while I was in high school several years ago. It is one of the first pieces of code I've ever written. While it still runs, it is not actively developed and the code quality is not up to professional standards.
 
 ## Installation
 
